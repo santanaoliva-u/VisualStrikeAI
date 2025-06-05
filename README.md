@@ -1,6 +1,5 @@
 
 
-````markdown
 # VisualStrikeAI
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
@@ -11,7 +10,7 @@
 > **VisualStrikeAI** es una herramienta avanzada para el análisis visual de imágenes, diseñada para optimizar composiciones publicitarias y decisiones de diseño a través de mapas de saliencia, overlays inteligentes y reportes automatizados.  
 > Ideal para profesionales del marketing, diseño gráfico y UX/UI.
 
----
+
 
 ## ✨ Características principales
 
@@ -201,5 +200,5 @@ Consulta el archivo [LICENSE](LICENSE) para más detalles.
 **VisualStrikeAI** — Potenciando decisiones visuales con tecnología de vanguardia.
 © 2025 VisualStrikeAI. Todos los derechos reservados.
 
-```
+
 
