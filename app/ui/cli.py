@@ -52,12 +52,27 @@ def analyze(
 
     # Interacción con el usuario
     print_separator("Configuración")
-    if overlay == "none":
+    valid_overlays = ["golden", "thirds", "none"]
+    if overlay not in valid_overlays:
         console.print("🎨 ¿Qué overlay prefieres?", style="yellow")
         overlay = typer.prompt("Opciones: golden/thirds/none", default="none")
+        while overlay not in valid_overlays:
+            console.print("[red]Error: Por favor selecciona una opción válida (golden, thirds, none)[/red]")
+            overlay = typer.prompt("Opciones: golden/thirds/none", default="none")
+    
+    text_content = ""
+    analysis_content = ""
+    aida_content = ""
     if not report:
         console.print("📜 ¿Quieres un reporte en PDF?", style="yellow")
         report = typer.confirm("Sí o No", default=False)
+    if report:
+        console.print("✍️ Ingresa un resumen general para el reporte (o presiona Enter para usar el predeterminado):", style="yellow")
+        text_content = typer.prompt("", default="")
+        console.print("✍️ Ingresa el texto del análisis (o presiona Enter para usar el predeterminado):", style="yellow")
+        analysis_content = typer.prompt("", default="")
+        console.print("✍️ Ingresa el texto AIDA (o presiona Enter para usar el predeterminado):", style="yellow")
+        aida_content = typer.prompt("", default="")
 
     # Cargar imagen con barra de progreso
     print_separator("Cargando Imagen")
@@ -72,9 +87,13 @@ def analyze(
     # Generar heatmap con progreso
     print_separator("Análisis de Saliencia")
     console.print("🧠 [cyan]Generando mapa de calor...[/cyan]")
-    for _ in track(range(100), description="🔥 Analizando...", style="magenta"):
-        time.sleep(0.01)  # Simulación
-    _, heatmap = generate_heatmap(image_path)
+    try:
+        for _ in track(range(100), description="🔥 Analizando...", style="magenta"):
+            time.sleep(0.01)  # Simulación
+        image, heatmap = generate_heatmap(image_path)
+    except Exception as e:
+        console.print(f"[red]❌ Error al generar el mapa de calor: {str(e)}[/red]")
+        raise typer.Exit()
 
     # Aplicar overlay
     print_separator("Aplicando Overlay")
@@ -89,23 +108,31 @@ def analyze(
         console.print("⭕ [dim]Sin overlay aplicado[/dim]")
 
     # Mostrar imagen
-    show_with_heatmap(image_with_overlay, heatmap)
-    console.print("🖼️ [cyan]Mostrando resultado con estilo...[/cyan]")
+    try:
+        show_with_heatmap(image_with_overlay, heatmap)
+        console.print("🖼️ [cyan]Mostrando resultado con estilo...[/cyan]")
+    except Exception as e:
+        console.print(f"[red]❌ Error al mostrar la imagen: {str(e)}[/red]")
+        raise typer.Exit()
 
     # Generar reporte si se solicita
     if report:
         print_separator("Generando Reporte")
         console.print("📝 [yellow]Creando tu reporte en PDF...[/yellow]")
-        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-            cv2.imwrite(tmp.name, heatmap)
-            heatmap_path = tmp.name
-        images = [image_path, heatmap_path]
-        if overlay != "none":
+        try:
             with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-                cv2.imwrite(tmp.name, image_with_overlay)
-                images.append(tmp.name)
-        generate_pdf_report(images, "Texto de ejemplo", "Análisis de ejemplo", "AIDA de ejemplo")
-        console.print("✅ [green]Reporte guardado como report.pdf[/green]")
+                cv2.imwrite(tmp.name, heatmap)
+                heatmap_path = tmp.name
+            images = [image_path, heatmap_path]
+            if overlay != "none":
+                with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+                    cv2.imwrite(tmp.name, image_with_overlay)
+                    images.append(tmp.name)
+            generate_pdf_report(images, text_content, analysis_content, aida_content)
+            console.print("✅ [green]Reporte guardado como report.pdf[/green]")
+        except Exception as e:
+            console.print(f"[red]❌ Error al generar el reporte PDF: {str(e)}[/red]")
+            raise typer.Exit()
 
     # Resumen final en tabla estilizada
     print_separator("Resumen Final")

@@ -1,0 +1,73 @@
+# Entornos virtuales
+VSI_env/
+venv/
+env/
+*.venv/
+
+# Archivos de Python compilados y cachés
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Archivos temporales
+/tmp/*
+*.tmp
+*.bak
+*.log
+
+# Archivos generados por la aplicación
+report.pdf
+*.pdf
+
+# Directorios y archivos de desarrollo
+.pytest_cache/
+.coverage
+coverage.xml
+*.cover
+*.egg-info/
+build/
+dist/
+*.egg
+.cache/
+.tox/
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de dependencias locales
+pip-wheel-metadata/
+
+# Ignorar el directorio 'path' si no contiene código fuente
+# Comenta la siguiente línea si 'path' contiene archivos necesarios
+path/
+
+# Archivos sensibles
+*.env
+*.secret
+*.key
+*.pem
+*.crt
+
+# Archivos grandes o de datos
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.dmg
+*.iso
+*.bin
+
+# Excepciones específicas (si quieres incluir algo dentro de un directorio ignorado)
+!.gitignore
+!LICENSE
+!requirements.txt
+!requirements_archlinux.sh

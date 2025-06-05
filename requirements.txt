@@ -1,0 +1,9 @@
+numpy
+opencv-python
+matplotlib
+pytesseract
+torch
+torchvision
+easyocr
+typer
+reportlab
